@@ -1,0 +1,48 @@
+{
+  "name": "Aviation Mirror Validation and Gold Refresh",
+  "properties": {
+    "description": "Runs mirror validation then rebuilds compact gold tables.",
+    "parameters": {
+      "validateNotebookId": { "type": "string" },
+      "buildGoldNotebookId": { "type": "string" }
+    },
+    "activities": [
+      {
+        "name": "Validate Mirror",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": { "value": "@pipeline().parameters.validateNotebookId", "type": "Expression" },
+          "workspaceId": { "value": "@pipeline().DataFactory", "type": "Expression" }
+        }
+      },
+      {
+        "name": "Build Gold",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          { "activity": "Validate Mirror", "dependencyConditions": ["Succeeded"] }
+        ],
+        "policy": {
+          "timeout": "0.02:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": { "value": "@pipeline().parameters.buildGoldNotebookId", "type": "Expression" },
+          "workspaceId": { "value": "@pipeline().DataFactory", "type": "Expression" }
+        }
+      }
+    ],
+    "annotations": ["aviation-demo", "safe-idempotent-gold"]
+  }
+}
+

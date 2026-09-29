@@ -1,0 +1,4 @@
+pandas>=2.2,<4
+pyarrow>=17,<26
+azure-ai-projects>=2.7,<3
+azure-identity>=1.25,<2

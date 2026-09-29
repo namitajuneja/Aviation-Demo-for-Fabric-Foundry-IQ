@@ -1,0 +1,28 @@
+table Disruption
+	column flight_key
+		dataType: string
+		sourceColumn: flight_key
+	column event_type
+		dataType: string
+		sourceColumn: event_type
+	column severity
+		dataType: string
+		sourceColumn: severity
+	column pax_affected
+		dataType: int64
+		sourceColumn: pax_affected
+	column disruption_cost_gbp
+		dataType: double
+		formatString: £#,0.00
+		sourceColumn: disruption_cost_gbp
+	measure 'Passengers Affected' = SUM(Disruption[pax_affected])
+		formatString: #,0
+	measure 'Disruption Cost GBP' = SUM(Disruption[disruption_cost_gbp])
+		formatString: £#,0
+	partition Disruption = entity
+		mode: directLake
+		source
+			entityName: gold_fact_disruption
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

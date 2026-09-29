@@ -1,0 +1,28 @@
+relationship flight_aircraft
+	fromColumn: Flight.tail_number
+	toColumn: Aircraft.tail_number
+
+relationship flight_route
+	fromColumn: Flight.route_id
+	toColumn: Route.route_id
+
+relationship booking_flight
+	fromColumn: Booking.flight_key
+	toColumn: Flight.flight_key
+
+relationship booking_customer
+	fromColumn: Booking.customer_id
+	toColumn: Customer.customer_id
+
+relationship disruption_flight
+	fromColumn: Disruption.flight_key
+	toColumn: Flight.flight_key
+
+relationship cargo_flight
+	fromColumn: Cargo.flight_key
+	toColumn: Flight.flight_key
+
+relationship maintenance_aircraft
+	fromColumn: Maintenance.tail_number
+	toColumn: Aircraft.tail_number
+

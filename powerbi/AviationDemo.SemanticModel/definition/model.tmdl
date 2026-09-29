@@ -1,0 +1,17 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+ref table Aircraft
+ref table Route
+ref table Customer
+ref table Flight
+ref table Booking
+ref table Disruption
+ref table Cargo
+ref table Maintenance
+

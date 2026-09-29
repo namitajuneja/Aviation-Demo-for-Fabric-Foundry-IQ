@@ -1,0 +1,50 @@
+table Flight
+	column flight_key
+		dataType: string
+		isKey
+		sourceColumn: flight_key
+	column flight_no
+		dataType: string
+		sourceColumn: flight_no
+	column date
+		dataType: dateTime
+		formatString: dd MMM yyyy
+		sourceColumn: date
+	column tail_number
+		dataType: string
+		sourceColumn: tail_number
+	column route_id
+		dataType: string
+		sourceColumn: route_id
+	column opco
+		dataType: string
+		sourceColumn: opco
+	column delay_minutes
+		dataType: int64
+		sourceColumn: delay_minutes
+	column cancelled_flag
+		dataType: boolean
+		sourceColumn: cancelled_flag
+	column load_factor
+		dataType: double
+		formatString: 0.0%
+		sourceColumn: load_factor
+	measure 'Flight Count' = COUNTROWS(Flight)
+		formatString: #,0
+	measure 'Cancelled Flights' = CALCULATE([Flight Count], Flight[cancelled_flag] = TRUE())
+		formatString: #,0
+	measure 'Cancellation Rate' = DIVIDE([Cancelled Flights], [Flight Count])
+		formatString: 0.0%
+	measure 'Average Delay Minutes' = CALCULATE(AVERAGE(Flight[delay_minutes]), Flight[cancelled_flag] = FALSE())
+		formatString: 0.0
+	measure 'On-Time Rate' = DIVIDE(CALCULATE([Flight Count], Flight[cancelled_flag] = FALSE(), Flight[delay_minutes] <= 15), CALCULATE([Flight Count], Flight[cancelled_flag] = FALSE()))
+		formatString: 0.0%
+	measure 'Average Load Factor' = CALCULATE(AVERAGE(Flight[load_factor]), Flight[cancelled_flag] = FALSE())
+		formatString: 0.0%
+	partition Flight = entity
+		mode: directLake
+		source
+			entityName: gold_fact_flight
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

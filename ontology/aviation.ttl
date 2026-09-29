@@ -1,0 +1,34 @@
+@prefix av: <https://example.contoso.com/aviation#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+av:AviationOntology a owl:Ontology ;
+  rdfs:label "Aviation group intelligence ontology" .
+
+av:Aircraft a owl:Class . av:Route a owl:Class . av:Flight a owl:Class .
+av:Customer a owl:Class . av:Booking a owl:Class . av:CargoShipment a owl:Class .
+av:MaintenanceEvent a owl:Class . av:Disruption a owl:Class .
+
+av:tailNumber a owl:DatatypeProperty ; rdfs:domain av:Aircraft ; rdfs:range xsd:string .
+av:flightNumber a owl:DatatypeProperty ; rdfs:domain av:Flight ; rdfs:range xsd:string .
+av:flightDate a owl:DatatypeProperty ; rdfs:domain av:Flight ; rdfs:range xsd:date .
+av:delayMinutes a owl:DatatypeProperty ; rdfs:domain av:Flight ; rdfs:range xsd:integer .
+av:loadFactor a owl:DatatypeProperty ; rdfs:domain av:Flight ; rdfs:range xsd:decimal .
+av:routeId a owl:DatatypeProperty ; rdfs:domain av:Route ; rdfs:range xsd:string .
+av:customerId a owl:DatatypeProperty ; rdfs:domain av:Customer ; rdfs:range xsd:string .
+av:bookingRef a owl:DatatypeProperty ; rdfs:domain av:Booking ; rdfs:range xsd:string .
+av:revenueGbp a owl:DatatypeProperty ; rdfs:domain av:Booking ; rdfs:range xsd:decimal .
+av:awbNumber a owl:DatatypeProperty ; rdfs:domain av:CargoShipment ; rdfs:range xsd:string .
+av:downtimeHours a owl:DatatypeProperty ; rdfs:domain av:MaintenanceEvent ; rdfs:range xsd:decimal .
+av:paxAffected a owl:DatatypeProperty ; rdfs:domain av:Disruption ; rdfs:range xsd:integer .
+
+av:operatedBy a owl:ObjectProperty ; rdfs:domain av:Flight ; rdfs:range av:Aircraft .
+av:follows a owl:ObjectProperty ; rdfs:domain av:Flight ; rdfs:range av:Route .
+av:reservedBy a owl:ObjectProperty ; rdfs:domain av:Booking ; rdfs:range av:Customer .
+av:forFlight a owl:ObjectProperty ; rdfs:domain av:Booking ; rdfs:range av:Flight .
+av:carries a owl:ObjectProperty ; rdfs:domain av:Flight ; rdfs:range av:CargoShipment .
+av:hasMaintenance a owl:ObjectProperty ; rdfs:domain av:Aircraft ; rdfs:range av:MaintenanceEvent .
+av:experiences a owl:ObjectProperty ; rdfs:domain av:Flight ; rdfs:range av:Disruption .
+

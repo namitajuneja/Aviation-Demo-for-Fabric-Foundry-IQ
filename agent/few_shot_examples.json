@@ -1,0 +1,27 @@
+[
+  {
+    "question": "Which five routes had the worst average delay last month?",
+    "dataSource": "AviationGold",
+    "queryGuidance": "Filter non-cancelled flights to the last complete calendar month, group by route, require at least 5 flights, order by average delay descending, return flight count.",
+    "answerShape": "State month and exclusion rule, then route, average delay minutes, and flight count."
+  },
+  {
+    "question": "How much revenue was lost on cancelled flights by operating company?",
+    "dataSource": "AviationGold",
+    "queryGuidance": "Join booking to flight on flight number and date, filter cancelled_flag=true, sum revenue_gbp plus ancillary_gbp, group by opco.",
+    "answerShape": "State that this is booked revenue associated with cancellations, not audited accounting loss."
+  },
+  {
+    "question": "Which aircraft combine high maintenance downtime and repeated disruptions?",
+    "dataSource": "AviationOntology",
+    "queryGuidance": "Traverse Aircraft <- Flight -> Disruption and Aircraft -> MaintenanceEvent; aggregate downtime hours and distinct disrupted flights by tail number.",
+    "answerShape": "Return tail number, aircraft type, downtime hours, disrupted flights, and period."
+  },
+  {
+    "question": "Compare cargo yield on short-haul and long-haul routes.",
+    "dataSource": "AviationGold",
+    "queryGuidance": "Join shipment to flight and route with the composite flight key, calculate chargeable-weight-weighted yield by haul_type.",
+    "answerShape": "Return haul type, weighted GBP/kg, chargeable kg, and shipment count."
+  }
+]
+

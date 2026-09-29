@@ -1,0 +1,33 @@
+table Maintenance
+	column tail_number
+		dataType: string
+		sourceColumn: tail_number
+	column event_date
+		dataType: dateTime
+		sourceColumn: event_date
+	column ata_chapter
+		dataType: string
+		sourceColumn: ata_chapter
+	column downtime_hours
+		dataType: double
+		sourceColumn: downtime_hours
+	column cost_gbp
+		dataType: double
+		formatString: £#,0.00
+		sourceColumn: cost_gbp
+	column aog_flag
+		dataType: boolean
+		sourceColumn: aog_flag
+	measure 'Maintenance Downtime Hours' = SUM(Maintenance[downtime_hours])
+		formatString: #,0.0
+	measure 'Maintenance Cost GBP' = SUM(Maintenance[cost_gbp])
+		formatString: £#,0
+	measure 'AOG Events' = CALCULATE(COUNTROWS(Maintenance), Maintenance[aog_flag] = TRUE())
+		formatString: #,0
+	partition Maintenance = entity
+		mode: directLake
+		source
+			entityName: gold_fact_maintenance
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

@@ -1,0 +1,88 @@
+version: 1
+name: AviationOntology
+description: Compact business ontology for cross-domain aviation operations.
+status: design-source
+note: This YAML is a human-reviewable design artifact, not a Fabric REST payload.
+namespace: https://example.contoso.com/aviation#
+entities:
+  Aircraft:
+    key: tail_number
+    source: aircraft
+    properties:
+      tail_number: string
+      type: string
+      opco: string
+      seats: integer
+      cargo_capacity_kg: decimal
+  Route:
+    key: route_id
+    source: route
+    properties:
+      route_id: string
+      origin_iata: string
+      dest_iata: string
+      distance_km: integer
+      haul_type: string
+  Flight:
+    key: [flight_no, date]
+    source: flight
+    properties:
+      flight_no: string
+      date: date
+      scheduled_dep: datetime
+      actual_dep: datetime
+      delay_minutes: integer
+      cancelled_flag: boolean
+      load_factor: decimal
+  Customer:
+    key: customer_id
+    source: customer
+    properties:
+      customer_id: string
+      home_airport: string
+      tier: string
+      opco_affinity: string
+  Booking:
+    key: booking_ref
+    source: booking
+    properties:
+      booking_ref: string
+      fare_class: string
+      revenue_gbp: decimal
+      ancillary_gbp: decimal
+      channel: string
+  CargoShipment:
+    key: awb_number
+    source: cargo_shipment
+    properties:
+      awb_number: string
+      weight_kg: decimal
+      yield_gbp_per_kg: decimal
+      commodity: string
+  MaintenanceEvent:
+    key: [tail_number, event_date, part_number]
+    source: maintenance_event
+    properties:
+      event_date: date
+      ata_chapter: string
+      downtime_hours: decimal
+      cost_gbp: decimal
+      aog_flag: boolean
+  Disruption:
+    key: [flight_no, date, event_type]
+    source: disruption_event
+    properties:
+      event_type: string
+      severity: string
+      pax_affected: integer
+      rebook_cost_gbp: decimal
+      compensation_gbp: decimal
+relationships:
+  - {name: operated_by, from: Flight, to: Aircraft, from_key: tail_number, to_key: tail_number, cardinality: "many-to-one"}
+  - {name: follows, from: Flight, to: Route, from_key: route_id, to_key: route_id, cardinality: "many-to-one"}
+  - {name: reserves, from: Customer, to: Booking, from_key: customer_id, to_key: customer_id, cardinality: "one-to-many"}
+  - {name: for_flight, from: Booking, to: Flight, from_key: [flight_no, date], to_key: [flight_no, date], cardinality: "many-to-one"}
+  - {name: carries, from: Flight, to: CargoShipment, from_key: [flight_no, date], to_key: [flight_no, date], cardinality: "one-to-many"}
+  - {name: has_maintenance, from: Aircraft, to: MaintenanceEvent, from_key: tail_number, to_key: tail_number, cardinality: "one-to-many"}
+  - {name: experiences, from: Flight, to: Disruption, from_key: [flight_no, date], to_key: [flight_no, date], cardinality: "one-to-many"}
+

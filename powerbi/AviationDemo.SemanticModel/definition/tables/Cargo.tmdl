@@ -1,0 +1,29 @@
+table Cargo
+	column awb_number
+		dataType: string
+		isKey
+		sourceColumn: awb_number
+	column flight_key
+		dataType: string
+		sourceColumn: flight_key
+	column chargeable_weight_kg
+		dataType: double
+		sourceColumn: chargeable_weight_kg
+	column yield_gbp_per_kg
+		dataType: double
+		formatString: £0.000
+		sourceColumn: yield_gbp_per_kg
+	column commodity
+		dataType: string
+		sourceColumn: commodity
+	measure 'Cargo Chargeable KG' = SUM(Cargo[chargeable_weight_kg])
+		formatString: #,0
+	measure 'Weighted Cargo Yield GBP per KG' = DIVIDE(SUMX(Cargo, Cargo[chargeable_weight_kg] * Cargo[yield_gbp_per_kg]), [Cargo Chargeable KG])
+		formatString: £0.000
+	partition Cargo = entity
+		mode: directLake
+		source
+			entityName: gold_fact_cargo
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

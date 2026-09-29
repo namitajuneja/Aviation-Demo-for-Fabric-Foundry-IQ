@@ -1,0 +1,26 @@
+table Aircraft
+	column tail_number
+		dataType: string
+		isKey
+		sourceColumn: tail_number
+	column type
+		dataType: string
+		sourceColumn: type
+	column opco
+		dataType: string
+		sourceColumn: opco
+	column seats
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: seats
+	column cargo_capacity_kg
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: cargo_capacity_kg
+	partition Aircraft = entity
+		mode: directLake
+		source
+			entityName: gold_dim_aircraft
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

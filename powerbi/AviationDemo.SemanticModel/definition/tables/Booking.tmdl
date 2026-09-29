@@ -1,0 +1,39 @@
+table Booking
+	column booking_ref
+		dataType: string
+		isKey
+		sourceColumn: booking_ref
+	column flight_key
+		dataType: string
+		sourceColumn: flight_key
+	column customer_id
+		dataType: string
+		sourceColumn: customer_id
+	column fare_class
+		dataType: string
+		sourceColumn: fare_class
+	column revenue_gbp
+		dataType: double
+		formatString: £#,0.00
+		sourceColumn: revenue_gbp
+	column ancillary_gbp
+		dataType: double
+		formatString: £#,0.00
+		sourceColumn: ancillary_gbp
+	column total_revenue_gbp
+		dataType: double
+		formatString: £#,0.00
+		sourceColumn: total_revenue_gbp
+	measure 'Total Revenue GBP' = SUM(Booking[total_revenue_gbp])
+		formatString: £#,0
+	measure 'Booking Count' = COUNTROWS(Booking)
+		formatString: #,0
+	measure 'Revenue per Booking' = DIVIDE([Total Revenue GBP], [Booking Count])
+		formatString: £#,0.00
+	partition Booking = entity
+		mode: directLake
+		source
+			entityName: gold_fact_booking
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

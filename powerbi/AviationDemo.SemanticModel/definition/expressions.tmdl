@@ -1,0 +1,9 @@
+expression DatabaseQuery =
+		let
+		    Source = Sql.Database("<FABRIC_SQL_ENDPOINT>", "<FABRIC_LAKEHOUSE_NAME>")
+		in
+		    Source
+	lineageTag: 22222222-2222-4222-8222-222222222222
+
+annotation PBI_IncludeFutureArtifacts = false
+

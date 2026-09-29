@@ -1,0 +1,25 @@
+table Route
+	column route_id
+		dataType: string
+		isKey
+		sourceColumn: route_id
+	column origin_iata
+		dataType: string
+		sourceColumn: origin_iata
+	column dest_iata
+		dataType: string
+		sourceColumn: dest_iata
+	column haul_type
+		dataType: string
+		sourceColumn: haul_type
+	column distance_km
+		dataType: int64
+		summarizeBy: average
+		sourceColumn: distance_km
+	partition Route = entity
+		mode: directLake
+		source
+			entityName: gold_dim_route
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

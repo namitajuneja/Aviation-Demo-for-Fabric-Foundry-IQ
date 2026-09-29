@@ -1,0 +1,21 @@
+table Customer
+	column customer_id
+		dataType: string
+		isKey
+		sourceColumn: customer_id
+	column home_airport
+		dataType: string
+		sourceColumn: home_airport
+	column tier
+		dataType: string
+		sourceColumn: tier
+	column opco_affinity
+		dataType: string
+		sourceColumn: opco_affinity
+	partition Customer = entity
+		mode: directLake
+		source
+			entityName: gold_dim_customer
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
